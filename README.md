@@ -1,55 +1,109 @@
-# Wine-Quality-Testing
+# Wine Quality Prediction Project
 
-This Python script demonstrates a comprehensive data analysis and machine learning pipeline for a wine quality dataset. The script includes data loading, preprocessing, exploratory data analysis (EDA), model training, and evaluation. It employs various machine learning algorithms to classify wine quality and utilizes performance metrics to assess model effectiveness. The workflow covers handling missing values, normalizing data, feature selection, model training, and generating confusion matrices for evaluation.
+## Project Overview
 
-Library Imports:
+This project aims to classify wine quality based on various chemical properties using different machine learning models. The models implemented include Logistic Regression, XGBoost, and Support Vector Classifier (SVC). The dataset used is the Wine Quality Dataset, which contains both red and white wine samples with various chemical properties and their corresponding quality ratings.
 
--Essential libraries are imported for data manipulation (pandas, numpy), visualization (matplotlib, seaborn), and machine learning (sklearn, xgboost).
+## Dataset
 
+The dataset used in this project is `winequalityN.csv`. The dataset includes the following columns:
 
-Data Loading:
+- `type`: The type of wine (red or white)
+- `fixed acidity`
+- `volatile acidity`
+- `citric acid`
+- `residual sugar`
+- `chlorides`
+- `free sulfur dioxide`
+- `total sulfur dioxide`
+- `density`
+- `pH`
+- `sulphates`
+- `alcohol`
+- `quality`: Quality rating of the wine
 
--The script uploads a CSV file containing wine quality data and loads it into a DataFrame. It then prints the first few rows of the DataFrame, its information, and descriptive statistics.
+## Project Structure
 
+```
+Wine-Quality-Prediction/
+├── winequalityN.csv
+├── model_training.ipynb
+├── README.md
+```
 
-Data Cleaning:
-
--Missing values in the dataset are handled by replacing them with the mean of the respective columns.
-
-
-Exploratory Data Analysis (EDA):
-
--Histograms are plotted to visualize the distribution of numerical features.
--A bar plot visualizes the relationship between wine quality and alcohol content.
--A heatmap of the correlation matrix is used to identify significant correlations between numerical features.
-
-
-Feature Engineering:
-
--The script drops the 'free sulfur dioxide' column if it exists.
--A new binary target column 'best quality' is created based on whether the quality score is greater than 5.
--Categorical values in the 'color' column are replaced with binary values (1 for white and 0 for red).
-
-
-Feature and Target Assignment:
-
--The features and target variables are separated. The 'quality' and 'best quality' columns are dropped from the features set.
-
-
-Data Splitting:
-
--The dataset is split into training and testing sets using an 80-20 split.
+- `winequalityN.csv`: The dataset file.
+- `model_training.ipynb`: Jupyter notebook for data analysis, model training, and evaluation.
+- `README.md`: This file.
 
 
-Normalization:
+## Running the Code
 
--Data normalization is performed using MinMaxScaler to scale the features to a range of [0, 1].
+### 1. Open Jupyter Notebook
 
+To start the Jupyter notebook, run the following command in your terminal:
 
-Model Training and Evaluation:
+```bash
+jupyter notebook
+```
 
--Three models are trained: Logistic Regression, XGBoost Classifier, and Support Vector Classifier (SVC).
--Each model's training and validation accuracy are evaluated using the ROC AUC score.
--A confusion matrix is generated and displayed for the XGBoost Classifier.
--A heatmap of feature correlations is plotted.
--A classification report is printed to show detailed performance metrics.
+This will open the Jupyter notebook interface in your web browser. Navigate to the `model_training.ipynb` file and open it.
+
+### 2. Run the Notebook
+
+Follow the instructions in the notebook to:
+1. **Load the Dataset**: Load the `winequalityN.csv` file.
+2. **Data Preprocessing**: Handle missing values and encode categorical variables.
+3. **Data Visualization**: Plot histograms and heatmaps to understand data distribution and correlations.
+4. **Feature Engineering**: Create new features if necessary.
+5. **Model Training**: Train Logistic Regression, XGBoost, and SVC models.
+6. **Model Evaluation**: Evaluate the models using ROC-AUC score, confusion matrix, and classification report.
+
+## Results
+
+### Data Preprocessing
+
+- Missing values were filled with the mean of the respective columns.
+- The `type` column was encoded (white = 1, red = 0).
+- A new target column `best quality` was created where wines with a quality score > 5 were labeled as 1 (good quality) and others as 0 (bad quality).
+
+### Model Performance
+
+Three models were trained and evaluated:
+
+1. **Logistic Regression**
+   - Training Accuracy: 0.698
+   - Validation Accuracy: 0.701
+
+2. **XGBoost**
+   - Training Accuracy: 0.978
+   - Validation Accuracy: 0.788
+
+3. **Support Vector Classifier (SVC)**
+   - Training Accuracy: 0.714
+   - Validation Accuracy: 0.711
+
+### Confusion Matrix for XGBoost
+
+```python
+cm = confusion_matrix(ytest, models[1].predict(xtest))
+disp = ConfusionMatrixDisplay(confusion_matrix=cm)
+disp.plot()
+plt.show()
+```
+
+### Classification Report for XGBoost
+
+```python
+print(metrics.classification_report(ytest, models[1].predict(xtest)))
+```
+
+```
+              precision    recall  f1-score   support
+
+           0       0.77      0.70      0.73       474
+           1       0.83      0.88      0.86       826
+
+    accuracy                           0.81      1300
+   macro avg       0.80      0.79      0.79      1300
+weighted avg       0.81      0.81      0.81      1300
+```
